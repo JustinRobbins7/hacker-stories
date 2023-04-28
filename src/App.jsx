@@ -1,6 +1,3 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 
 const list = [
@@ -35,12 +32,22 @@ const App = () => (
   );
 
 
-const Search = () => (
+const Search = () => {
+  const handleChange = (event) => {
+    // Synthetic event
+    console.log(event)
+    // Value of target (here: input HTML element)
+    console.log(event.target.value)
+  }
+
+  return (
     <div>
       <label htmlFor="search">Search: </label>
-      <input id="search" type="text"/>
+      {/* Remember to pass the function itself, not the return value (e.g. handleChange())*/}
+      <input id="search" type="text" onChange={handleChange}/>
     </div>
   );
+}
 
 
 const List = () => (
