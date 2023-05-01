@@ -24,27 +24,29 @@ const App = () => {
     }
   ]
 
+  const handleSearch = (event) => {
+    console.log(event.target.value)
+  }
+
   return (
     <div>
       <h1>My Hacker Stories</h1>
 
-      <Search/>
+      <Search onSearch={handleSearch} />
 
       <hr/>
 
-      <List list={stories}/>
+      <List list={stories} />
     </div>
   )}
 
 
-const Search = () => {
+const Search = (props) => {
   const [searchTerm, setSearchTerm] = React.useState('');
 
   const handleChange = (event) => {
-    // Synthetic event
-    console.log(event)
-    // Value of target (here: input HTML element)
-    console.log(event.target.value)
+    // Use callback function
+    props.onSearch(event)
     // Set value
     setSearchTerm(event.target.value)
   }
