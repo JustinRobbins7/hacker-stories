@@ -5,6 +5,9 @@ import React from 'react'
 
 
 const App = () => {
+
+  const [searchTerm, setSearchTerm] = React.useState('');
+
   const stories = [
     {
       title: 'React',
@@ -26,46 +29,44 @@ const App = () => {
 
   const handleSearch = (event) => {
     console.log(event.target.value)
-  }
-
-  return (
-    <div>
-      <h1>My Hacker Stories</h1>
-
-      <Search onSearch={handleSearch} />
-
-      <hr/>
-
-      <List list={stories} />
-    </div>
-  )}
-
-
-const Search = (props) => {
-  const [searchTerm, setSearchTerm] = React.useState('');
-
-  const handleChange = (event) => {
-    // Use callback function
-    props.onSearch(event)
     // Set value
     setSearchTerm(event.target.value)
   }
 
   return (
     <div>
+      <h1>My Hacker Stories</h1>
+
+      <Search onSearch={handleSearch} searchTerm={searchTerm} />
+
+      <hr/>
+
+      <List searchTerm={searchTerm} list={stories} />
+    </div>
+  )}
+
+
+const Search = (props) => {
+
+  return (
+    <div>
       <label htmlFor="search">Search: </label>
       {/* Remember to pass the function itself, not the return value (e.g. handleChange())*/}
-      <input id="search" type="text" onChange={handleChange}/>
+      <input id="search" type="text" onChange={props.onSearch}/>
 
-      <p>Searching for <b>{searchTerm}</b></p>
+      <p>Searching for <b>{props.searchTerm}</b></p>
     </div>
   );
 }
 
 const List = (props) => (
     <ul>
-        {props.list.map((item) => (
-            <Item key={item.objectID} item={item} />
+        {props.list
+        .filter(
+          (item) => item.title.toLowerCase().includes(props.searchTerm.toLowerCase()) || item.author.toLowerCase().includes(props.searchTerm.toLowerCase())
+          )
+          .map((filteredItem) => (
+            <Item key={filteredItem.objectID} item={filteredItem} />
           )
         )}
       </ul>
