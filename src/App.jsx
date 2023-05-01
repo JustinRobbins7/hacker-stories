@@ -45,25 +45,23 @@ const App = () => {
     </div>
   )}
 
-
-const Search = (props) => {
-
-  return (
+// Prop destructuring
+const Search = ({onSearch, searchTerm}) => (
     <div>
       <label htmlFor="search">Search: </label>
       {/* Remember to pass the function itself, not the return value (e.g. handleChange())*/}
-      <input id="search" type="text" onChange={props.onSearch}/>
+      <input id="search" type="text" onChange={onSearch}/>
 
-      <p>Searching for <b>{props.searchTerm}</b></p>
+      <p>Searching for <b>{searchTerm}</b></p>
     </div>
   );
-}
 
-const List = (props) => (
+// Prop destructuring
+const List = ({searchTerm, list}) => (
     <ul>
-        {props.list
+        {list
         .filter(
-          (item) => item.title.toLowerCase().includes(props.searchTerm.toLowerCase()) || item.author.toLowerCase().includes(props.searchTerm.toLowerCase())
+          (item) => item.title.toLowerCase().includes(searchTerm.toLowerCase()) || item.author.toLowerCase().includes(searchTerm.toLowerCase())
           )
           .map((filteredItem) => (
             <Item key={filteredItem.objectID} item={filteredItem} />
@@ -72,14 +70,15 @@ const List = (props) => (
       </ul>
   );
 
-const Item = (props) => (
+// Prop destructuring
+const Item = ({ item }) => (
   <li>
     <span>
-      <a href={props.item.url}>{props.item.title} </a>
+      <a href={item.url}>{item.title} </a>
     </span>
-    <span>{props.item.author} </span>
-    <span>{props.item.num_comments} </span>
-    <span>{props.item.points} </span>
+    <span>{item.author} </span>
+    <span>{item.num_comments} </span>
+    <span>{item.points} </span>
   </li>
 )
 
