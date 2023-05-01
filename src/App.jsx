@@ -1,5 +1,6 @@
 /* eslint react/prop-types: 0 */
 import './App.css'
+import React from 'react'
 
 
 
@@ -37,11 +38,15 @@ const App = () => {
 
 
 const Search = () => {
+  const [searchTerm, setSearchTerm] = React.useState('');
+
   const handleChange = (event) => {
     // Synthetic event
     console.log(event)
     // Value of target (here: input HTML element)
     console.log(event.target.value)
+    // Set value
+    setSearchTerm(event.target.value)
   }
 
   return (
@@ -49,6 +54,8 @@ const Search = () => {
       <label htmlFor="search">Search: </label>
       {/* Remember to pass the function itself, not the return value (e.g. handleChange())*/}
       <input id="search" type="text" onChange={handleChange}/>
+
+      <p>Searching for <b>{searchTerm}</b></p>
     </div>
   );
 }
