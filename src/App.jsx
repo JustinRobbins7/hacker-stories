@@ -56,22 +56,22 @@ const Search = ({onSearch, searchTerm}) => (
     </div>
   );
 
-// Prop destructuring
 const List = ({searchTerm, list}) => (
     <ul>
         {list
         .filter(
           (item) => item.title.toLowerCase().includes(searchTerm.toLowerCase()) || item.author.toLowerCase().includes(searchTerm.toLowerCase())
-          )
-          .map((filteredItem) => (
-            <Item key={filteredItem.objectID} item={filteredItem} />
+          ) // Object ID is extracted via rest operator (is rest since its on left side of func declaration)
+          .map(({objectID, ...filteredItem}) => (
+            // Item is sent spread arguments
+            <Item key={objectID} {...filteredItem} />
           )
         )}
       </ul>
   );
 
-// NEsted prop destructuring
-const Item = ({ item: {title, url, author, num_comments, points} }) => (
+// Props were spread
+const Item = ({ title, url, author, num_comments, points }) => (
   <li>
     <span>
       <a href={url}>{title} </a>
