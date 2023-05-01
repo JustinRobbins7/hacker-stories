@@ -6,7 +6,7 @@ import React from 'react'
 
 const App = () => {
 
-  const [searchTerm, setSearchTerm] = React.useState('');
+  const [searchTerm, setSearchTerm] = React.useState('Re');
 
   const stories = [
     {
@@ -33,6 +33,10 @@ const App = () => {
     setSearchTerm(event.target.value)
   }
 
+  const searchedStories = stories.filter(
+    (story) => (story.title.toLowerCase().includes(searchTerm.toLowerCase() || story.author.toLowerCase().includes(searchTerm.toLowerCase())))
+  )
+
   return (
     <div>
       <h1>My Hacker Stories</h1>
@@ -41,44 +45,38 @@ const App = () => {
 
       <hr/>
 
-      <List searchTerm={searchTerm} list={stories} />
+      <List searchTerm={searchTerm} list={searchedStories} />
     </div>
   )}
 
 // Prop destructuring
-const Search = ({onSearch, searchTerm}) => (
+const Search = ({searchTerm, onSearch}) => (
     <div>
       <label htmlFor="search">Search: </label>
       {/* Remember to pass the function itself, not the return value (e.g. handleChange())*/}
-      <input id="search" type="text" onChange={onSearch}/>
+      <input id="search" type="text" value={searchTerm} onChange={onSearch}/>
 
       <p>Searching for <b>{searchTerm}</b></p>
     </div>
   );
 
-const List = ({searchTerm, list}) => (
+
+const List = ({ list }) => (
     <ul>
-        {list
-        .filter(
-          (item) => item.title.toLowerCase().includes(searchTerm.toLowerCase()) || item.author.toLowerCase().includes(searchTerm.toLowerCase())
-          ) // Object ID is extracted via rest operator (is rest since its on left side of func declaration)
-          .map(({objectID, ...filteredItem}) => (
-            // Item is sent spread arguments
-            <Item key={objectID} {...filteredItem} />
-          )
-        )}
+        {list.map((item) => (
+            <Item key={item.objectID} item={item} />
+        ))}
       </ul>
   );
 
-// Props were spread
-const Item = ({ title, url, author, num_comments, points }) => (
+const Item = ({ item }) => (
   <li>
     <span>
-      <a href={url}>{title} </a>
+      <a href={item.url}>{item.title} </a>
     </span>
-    <span>{author} </span>
-    <span>{num_comments} </span>
-    <span>{points} </span>
+    <span>{item.author} </span>
+    <span>{item.num_comments} </span>
+    <span>{item.points} </span>
   </li>
 )
 
