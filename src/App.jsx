@@ -60,13 +60,13 @@ const App = () => {
 
 // Prop destructuring
 const Search = ({searchTerm, onSearch}) => (
-    <div>
+    <> {/* Shorthand for <React.Fragment>, allowing multiple elements to be returned side-by-side */}
       <label htmlFor="search">Search: </label>
       {/* Remember to pass the function itself, not the return value (e.g. handleChange())*/}
       <input id="search" type="text" value={searchTerm} onChange={onSearch}/>
 
       <p>Searching for <b>{searchTerm}</b></p>
-    </div>
+    </>
   );
 
 
