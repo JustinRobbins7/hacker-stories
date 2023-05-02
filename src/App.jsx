@@ -2,15 +2,18 @@
 import './App.css'
 import React from 'react'
 
-
-
-const App = () => {
-
-  const [searchTerm, setSearchTerm] = React.useState(localStorage.getItem('search') || 'React');
+// Custom Hook
+const useStorageState = (key, initialState) => {
+  const [value, setValue] = React.useState(localStorage.getItem(key) || initialState)
 
   React.useEffect(() => {
-    localStorage.setItem('search', searchTerm)
-  }, [searchTerm])
+    localStorage.setItem(key, value)
+  }, [key, value])
+
+  return [value, setValue]
+}
+
+const App = () => {
 
   const stories = [
     {
@@ -30,6 +33,8 @@ const App = () => {
       objectID: 1,
     }
   ]
+
+  const [searchTerm, setSearchTerm] = useStorageState('search', 'React')
 
   const handleSearch = (event) => {
     console.log(event.target.value)
