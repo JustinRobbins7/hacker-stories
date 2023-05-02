@@ -50,22 +50,35 @@ const App = () => {
     <div>
       <h1>My Hacker Stories</h1>
 
-      <Search onSearch={handleSearch} searchTerm={searchTerm} />
+      {/* Component previously known as Search */}
+      <InputWithLabel 
+        id='search'
+        label="Search: "
+        type='text'
+        value={searchTerm} 
+        onInputChange={handleSearch} 
+      />
 
       <hr/>
 
-      <List searchTerm={searchTerm} list={searchedStories} />
+      <List 
+        searchTerm={searchTerm} 
+        list={searchedStories} 
+      />
+
     </div>
   )}
 
-// Prop destructuring
-const Search = ({searchTerm, onSearch}) => (
-    <> {/* Shorthand for <React.Fragment>, allowing multiple elements to be returned side-by-side */}
-      <label htmlFor="search">Search: </label>
+// Component previously known as Search
+const InputWithLabel = ({id, label, type = 'text', value, onInputChange}) => (
+    <> 
+      <label htmlFor={id}>{label}</label>
       {/* Remember to pass the function itself, not the return value (e.g. handleChange())*/}
-      <input id="search" type="text" value={searchTerm} onChange={onSearch}/>
-
-      <p>Searching for <b>{searchTerm}</b></p>
+      <input 
+        id={id} 
+        type={type} 
+        value={value} 
+        onChange={onInputChange}/>
     </>
   );
 
