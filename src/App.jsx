@@ -56,6 +56,7 @@ const App = () => {
         id='search'
         type='text'
         value={searchTerm} 
+        isFocused
         onInputChange={handleSearch} 
       >
         <strong>Search: </strong>
@@ -73,7 +74,7 @@ const App = () => {
 
 // Component previously known as Search
 // Can leverage child value
-const InputWithLabel = ({id, type = 'text', value, onInputChange, children}) => (
+const InputWithLabel = ({id, type = 'text', value, isFocused, onInputChange, children}) => (
     <> 
       <label htmlFor={id}>{children}</label>
       {/* Remember to pass the function itself, not the return value (e.g. handleChange())*/}
@@ -81,6 +82,7 @@ const InputWithLabel = ({id, type = 'text', value, onInputChange, children}) => 
         id={id} 
         type={type} 
         value={value} 
+        autoFocus={isFocused}
         onChange={onInputChange}/>
     </>
   );
