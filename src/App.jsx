@@ -6,7 +6,11 @@ import React from 'react'
 
 const App = () => {
 
-  const [searchTerm, setSearchTerm] = React.useState('Re');
+  const [searchTerm, setSearchTerm] = React.useState(localStorage.getItem('search') || 'React');
+
+  React.useEffect(() => {
+    localStorage.setItem('search', searchTerm)
+  }, [searchTerm])
 
   const stories = [
     {
