@@ -51,13 +51,15 @@ const App = () => {
       <h1>My Hacker Stories</h1>
 
       {/* Component previously known as Search */}
+      {/* Can use split declaration and pass between value as children */}
       <InputWithLabel 
         id='search'
-        label="Search: "
         type='text'
         value={searchTerm} 
         onInputChange={handleSearch} 
-      />
+      >
+        <strong>Search: </strong>
+      </InputWithLabel>
 
       <hr/>
 
@@ -70,9 +72,10 @@ const App = () => {
   )}
 
 // Component previously known as Search
-const InputWithLabel = ({id, label, type = 'text', value, onInputChange}) => (
+// Can leverage child value
+const InputWithLabel = ({id, type = 'text', value, onInputChange, children}) => (
     <> 
-      <label htmlFor={id}>{label}</label>
+      <label htmlFor={id}>{children}</label>
       {/* Remember to pass the function itself, not the return value (e.g. handleChange())*/}
       <input 
         id={id} 
