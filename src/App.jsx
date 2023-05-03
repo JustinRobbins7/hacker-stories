@@ -4,25 +4,6 @@ import React from 'react'
 
 const API_ENDPOINT = 'https://hn.algolia.com/api/v1/search?query='
 
-const initialStories = [
-  {
-    title: 'React',
-    url: 'https://react.org',
-    author: 'Jordan Walke',
-    num_comments: 3,
-    points: 4,
-    objectID: 0,
-  },
-  {
-    title: 'Redux',
-    url: 'https://redux.js.org/',
-    author: 'Dan Abramov, Andrew Clark',
-    num_comments: 2,
-    points: 5,
-    objectID: 1,
-  }
-]
-
 // Story reducer
 const storiesReducer = (state, action) => {
   switch(action.type) {
@@ -68,7 +49,7 @@ const useStorageState = (key, initialState) => {
 }
 
 const App = () => {
-  const [searchTerm, setSearchTerm] = useStorageState('search', 'React')
+  const [searchTerm, setSearchTerm] = useStorageState('search', '')
 
   const [stories, dispatchStories] = React.useReducer(
     storiesReducer,
@@ -76,9 +57,11 @@ const App = () => {
   ) 
 
   React.useEffect(() => {
+    if (!searchTerm) { return }
+
     dispatchStories({type: 'STORIES_FETCH_INIT'})
 
-    fetch(`${API_ENDPOINT}react`)
+    fetch(`${API_ENDPOINT}${searchTerm}`)
       .then((response) => response.json())
       .then((result) => {
         dispatchStories({
@@ -88,7 +71,7 @@ const App = () => {
     }).catch(() =>
       dispatchStories({type: 'STORIES_FETCH_FAILURE'})
     );
-  }, []); 
+  }, [searchTerm]); 
   
 
   const handleSearch = (event) => {
@@ -103,10 +86,6 @@ const App = () => {
       payload: item
     })
   }
-
-  const searchedStories = stories.data.filter(
-    (story) => (story.title.toLowerCase().includes(searchTerm.toLowerCase() || story.author.toLowerCase().includes(searchTerm.toLowerCase())))
-  )
 
   return (
     <div>
@@ -131,7 +110,7 @@ const App = () => {
             <p>Loading...</p>
           ) : ( 
             <List 
-              list={searchedStories} 
+              list={stories.data} 
               onRemoveItem={handleRemoveStory} 
             /> 
           )
