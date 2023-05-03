@@ -2,6 +2,8 @@
 import './App.css'
 import React from 'react'
 
+const API_ENDPOINT = 'https://hn.algolia.com/api/v1/search?query='
+
 const initialStories = [
   {
     title: 'React',
@@ -20,16 +22,6 @@ const initialStories = [
     objectID: 1,
   }
 ]
-
-// Async Data
-const getAsyncStories = () => (
-  new Promise((resolve) => 
-    setTimeout(
-      () => resolve({ data: { stories: initialStories } }),
-      2000
-    )
-  )
-)
 
 // Story reducer
 const storiesReducer = (state, action) => {
@@ -86,16 +78,17 @@ const App = () => {
   React.useEffect(() => {
     dispatchStories({type: 'STORIES_FETCH_INIT'})
 
-    getAsyncStories()
+    fetch(`${API_ENDPOINT}react`)
+      .then((response) => response.json())
       .then((result) => {
         dispatchStories({
           type: 'STORIES_FETCH_SUCCESS',
-          payload: result.data.stories,
+          payload: result.hits,
         })
     }).catch(() =>
       dispatchStories({type: 'STORIES_FETCH_FAILURE'})
     );
-  }, []);
+  }, []); 
   
 
   const handleSearch = (event) => {
