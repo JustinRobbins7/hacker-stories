@@ -48,11 +48,18 @@ const useStorageState = (key, initialState) => {
 
 const App = () => {
   const [stories, setStories] = React.useState([]) 
+  const [isLoading, setIsLoading] = React.useState(false)
+  const [isError, setIsError] = React.useState(false);
 
   React.useEffect(() => {
+    setIsLoading(true)
+
     getAsyncStories().then(result => {
       setStories(result.data.stories);
-    });
+      setIsLoading(false)
+    }).catch(
+      () => setIsError(true)
+    );
   }, []);
   
 
@@ -79,8 +86,6 @@ const App = () => {
     <div>
       <h1>My Hacker Stories</h1>
 
-      {/* Component previously known as Search */}
-      {/* Can use split declaration and pass between value as children */}
       <InputWithLabel 
         id='search'
         type='text'
@@ -93,11 +98,19 @@ const App = () => {
 
       <hr/>
 
-      <List 
-        searchTerm={searchTerm} 
-        list={searchedStories} 
-        onRemoveItem={handleRemoveStory}
-      />
+      {isError && <p> Something went wrong...</p>}
+
+      {/* Ternary operator rendering */}
+      {isLoading ? (
+            <p>Loading...</p>
+          ) : ( 
+            <List 
+              list={searchedStories} 
+              onRemoveItem={handleRemoveStory} 
+            /> 
+          )
+        }
+      
 
     </div>
   )}
