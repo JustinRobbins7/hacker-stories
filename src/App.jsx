@@ -21,6 +21,20 @@ const initialStories = [
   }
 ]
 
+// Async Data
+const getAsyncStories = () => (
+  // Shorthand
+  // Promise.resolve({ data: { stories: initialStories } })
+
+  new Promise((resolve) => 
+    setTimeout(
+      () => resolve({ data: { stories: initialStories } }),
+      2000
+    )
+  )
+)
+
+
 // Custom Hook
 const useStorageState = (key, initialState) => {
   const [value, setValue] = React.useState(localStorage.getItem(key) || initialState)
@@ -33,7 +47,15 @@ const useStorageState = (key, initialState) => {
 }
 
 const App = () => {
-  const [stories, setStories] = React.useState(initialStories) 
+  const [stories, setStories] = React.useState([]) 
+
+  React.useEffect(() => {
+    getAsyncStories().then(result => {
+      setStories(result.data.stories);
+    });
+  }, []);
+  
+
   const [searchTerm, setSearchTerm] = useStorageState('search', 'React')
 
   const handleSearch = (event) => {
