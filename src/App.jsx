@@ -48,20 +48,25 @@ const useStorageState = (key, initialState) => {
   return [value, setValue]
 }
 
+/*
+*
+* App
+*
+*/
 const App = () => {
   const [searchTerm, setSearchTerm] = useStorageState('search', '')
+  const [url, setUrl] = React.useState(`${API_ENDPOINT}${searchTerm}`)
 
   const [stories, dispatchStories] = React.useReducer(
     storiesReducer,
     { data: [], isLoading: false, isError: false },
   ) 
 
+  // useCallback triggered when API url changes instead of when searchTerm changes
   const handleFetchStories = React.useCallback(() => {
-    if (!searchTerm) { return }
-
     dispatchStories({type: 'STORIES_FETCH_INIT'})
 
-    fetch(`${API_ENDPOINT}${searchTerm}`)
+    fetch(url)
       .then((response) => response.json())
       .then((result) => {
         dispatchStories({
@@ -71,16 +76,19 @@ const App = () => {
     }).catch(() =>
       dispatchStories({type: 'STORIES_FETCH_FAILURE'})
     );
-  }, [searchTerm]); 
+  }, [url]); 
   
+  // Trigger when handleFetchStories function is changed
   React.useEffect(() => {
     handleFetchStories()
   }, [handleFetchStories])
 
-  const handleSearch = (event) => {
-    console.log(event.target.value)
-    // Set value
+  const handleSearchInput = (event) => {
     setSearchTerm(event.target.value)
+  }
+
+  const handleSearchSubmit = () => {
+    setUrl(`${API_ENDPOINT}${searchTerm}`)
   }
 
   const handleRemoveStory = (item) => {
@@ -99,10 +107,18 @@ const App = () => {
         type='text'
         value={searchTerm} 
         isFocused
-        onInputChange={handleSearch} 
+        onInputChange={handleSearchInput} 
       >
         <strong>Search: </strong>
       </InputWithLabel>
+
+      <button
+        type="button"
+        disabled={!searchTerm}
+        onClick={handleSearchSubmit}
+      >
+        Submit
+      </button>
 
       <hr/>
 
