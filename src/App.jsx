@@ -88,8 +88,10 @@ const App = () => {
     setSearchTerm(event.target.value)
   }
 
-  const handleSearchSubmit = () => {
+  const handleSearchSubmit = (event) => {
     setUrl(`${API_ENDPOINT}${searchTerm}`)
+
+    event.preventDefault();
   }
 
   const handleRemoveStory = (item) => {
@@ -103,23 +105,11 @@ const App = () => {
     <div>
       <h1>My Hacker Stories</h1>
 
-      <InputWithLabel 
-        id='search'
-        type='text'
-        value={searchTerm} 
-        isFocused
-        onInputChange={handleSearchInput} 
-      >
-        <strong>Search: </strong>
-      </InputWithLabel>
-
-      <button
-        type="button"
-        disabled={!searchTerm}
-        onClick={handleSearchSubmit}
-      >
-        Submit
-      </button>
+      <SearchForm 
+        searchTerm={searchTerm}
+        onSearchInput={handleSearchInput}
+        onSearchSubmit={handleSearchSubmit} 
+      ></SearchForm>
 
       <hr/>
 
@@ -177,7 +167,30 @@ const Item = ({ item, onRemoveItem }) => (
     </li>
   )
 
+const SearchForm = ({
+  searchTerm,
+  onSearchInput,
+  onSearchSubmit,
+}) => (
+  <form onSubmit={onSearchSubmit}>
+    <InputWithLabel 
+      id='search'
+      type='text'
+      value={searchTerm} 
+      isFocused
+      onInputChange={onSearchInput} 
+    >
+      <strong>Search: </strong>
+    </InputWithLabel>
 
+    <button
+      type="submit"
+      disabled={!searchTerm}
+    >
+      Submit
+    </button>
+  </form>
+)
   
 
 export default App
