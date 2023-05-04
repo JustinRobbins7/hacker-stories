@@ -64,21 +64,19 @@ const App = () => {
   ) 
 
   // useCallback triggered when API url changes instead of when searchTerm changes
-  const handleFetchStories = React.useCallback(() => {
+  const handleFetchStories = React.useCallback(async () => {
     dispatchStories({type: 'STORIES_FETCH_INIT'})
 
-    axios
-      .get(url)
-        .then((result) => {
-          dispatchStories({
-            type: 'STORIES_FETCH_SUCCESS',
-            payload: result.data.hits,
-          })
-      }).catch((error) => {
-        console.error(error)
-        dispatchStories({type: 'STORIES_FETCH_FAILURE'})
-      }
-      );
+    try {
+      const result = await axios.get(url)
+
+      dispatchStories({
+        type: 'STORIES_FETCH_SUCCESS',
+        payload: result.data.hits,
+      })
+    } catch {
+      dispatchStories({ type: 'STORIES_FETCH_FAILURE' })
+    }
   }, [url]); 
   
   // Trigger when handleFetchStories function is changed
